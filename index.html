@@ -8,16 +8,18 @@
     <script src="jquery-3.6.0.js"></script>
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
         body {
             padding: 20px;
         }
         #backButton {
             cursor: pointer;
+            display: inline-block;
             font-size: 24px;
+            margin: 20px 0;
         }
         #backButton:hover {
             color: blue;
@@ -40,7 +42,7 @@
 <body>
     <div id="root">
         <h1>Users and Posts</h1>
-        <h2>A sample application that uses jQuery and the JSONPlaceholder API</h2>
+        <h2>A sample application that uses jQuery and the JSONPlaceholder API at https://jsonplaceholder.typicode.com/</h2>
         <a id="backButton">&lt; Back to Users Table</a>
         <h3 id="displayedUser"></h3>
         <div id="usersContainer">
@@ -102,6 +104,7 @@
                                 $('#postsTable').show();
                                 $('#backButton').show();
                                 $('#displayedUser').html("Displaying the posts of " + selectedName);
+                                $('#displayedUser').show();
                             });
                     });
 
@@ -109,6 +112,7 @@
                     $("#backButton").on('click', function(e) {
                         $('#usersTable').show();
                         $('#postsTable').hide();
+                        $('#displayedUser').hide();
                     });
                 });
 
