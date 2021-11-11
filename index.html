@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Users and Posts</title>
     <script src="jquery-3.6.0.js"></script>
     <style>
         * {
@@ -14,6 +14,14 @@
         }
         body {
             padding: 20px;
+        }
+        #backButton {
+            cursor: pointer;
+            font-size: 24px;
+        }
+        #backButton:hover {
+            color: blue;
+            text-decoration: underline;
         }
         table {
             border-collapse: collapse;
@@ -32,22 +40,77 @@
 <body>
     <div id="root">
         <h1>Users and Posts</h1>
-        <h2>A sample application that uses jQuery and the JSONPlaceholder API
-
-        </h2>
-        <table>
-            <tr>
-                <td>a</td>
-                <td>b</td>
-            </tr>
-            <tr>
-                <td>c</td>
-                <td>d</td>
-            </tr>
-        </table>
+        <h2>A sample application that uses jQuery and the JSONPlaceholder API</h2>
+        <a id="backButton">&lt; Back to Users Table</a>
+        <h3 id="displayedUser"></h3>
+        <div id="usersContainer">
+            <table id="usersTable"></table>
+            <table id="postsTable"></table>
+        </div>
     </div>
     <script>
         $(document).ready(function() {
+            let users = [];
+            let selectedUser;
+            let selectedName;
+
+            $("#backButton").hide();
+
+            fetch("https://jsonplaceholder.typicode.com/users")
+                .then(res => res.json())
+                .then(data => {
+                    let users = data;
+
+                    // fill the users table
+                    let numRows = users.length;
+
+                    let table_body = '';
+                    for(let i = 0; i < numRows; i++){
+                        table_body += '<tr>';
+                        table_body += '<td>' + users[i].id + '</td>';
+                        table_body += '<td>' + users[i].name + '</td>';
+                        table_body += '<td>' + users[i].username + '</td>';
+                        table_body += '<td>' + users[i].email + '</td>';
+                        table_body += '<td>' + users[i].address.street + ' ' + users[i].address.suite + ', ' + users[i].address.city + '</td>';
+                        table_body += '<td>' + users[i].phone + '</td>';
+                        table_body += '<td>' + users[i].website + '</td>';
+                        table_body += '<td>' + users[i].company.name + '</td>';
+                        table_body += '</tr>';
+                    }
+
+                    $('#usersTable').html(table_body);
+
+                    // add table row click handlers
+                    $('#usersTable').on('click','tr', function(e) { 
+                        selectedUser = $(this.children[0]).text();
+                        selectedName = $(this.children[1]).text();
+                        
+                        fetch(`https://jsonplaceholder.typicode.com/posts?userId=${selectedUser}`)
+                            .then(res => res.json())
+                            .then(posts => {
+                                let table_body = '';
+
+                                for(let i = 0; i < numRows; i++){
+                                    table_body += '<tr>';
+                                    table_body += '<td>' + posts[i].id + '</td>';
+                                    table_body += '<td>' + posts[i].title + '</td>';
+                                    table_body += '<td>' + posts[i].body + '</td>';
+                                    table_body += '</tr>';
+                                }
+                                $('#usersTable').hide();
+                                $('#postsTable').html(table_body);
+                                $('#postsTable').show();
+                                $('#backButton').show();
+                                $('#displayedUser').html("Displaying the posts of " + selectedName);
+                            });
+                    });
+
+                    // back button event handler
+                    $("#backButton").on('click', function(e) {
+                        $('#usersTable').show();
+                        $('#postsTable').hide();
+                    });
+                });
 
         });
     </script>
