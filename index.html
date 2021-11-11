@@ -16,7 +16,16 @@
             padding: 20px;
         }
         table {
+            border-collapse: collapse;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        table tr:hover {
+            background-color: yellow;
+        }
+        table, th, td {
             border: 1px solid black;
+            padding: 20px;
         }
     </style>
 </head>
@@ -24,7 +33,7 @@
     <div id="root">
         <h1>Users and Posts</h1>
         <h2>A sample application that uses jQuery and the JSONPlaceholder API
-            
+
         </h2>
         <table>
             <tr>
@@ -37,5 +46,10 @@
             </tr>
         </table>
     </div>
+    <script>
+        $(document).ready(function() {
+
+        });
+    </script>
 </body>
 </html>
